@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include<string>
 #include <cmath>
+#include <iomanip>
 
 
 using namespace std;
@@ -75,11 +76,10 @@ short  WhichQuestionLevel()
 {
 
 	short QuestionLevel = 1;
-	cout << "Question Level [1]:Easy,  [2]: Med ,[3]: Hard , 4[Mix] ";
+	cout << "\nChoice Level of the Question  1:[Easy],  2:[Med],  3:[Hard],  4:[Mix]: ";
 	cin >> QuestionLevel;
 
 	return QuestionLevel;
-
 
 }
 
@@ -95,7 +95,6 @@ enQuestionLevel ChoiceQuestionLevel()
 {
 
 	short QuestioKind = WhichQuestionLevel();
-
 
 	switch (QuestioKind)
 	{
@@ -117,7 +116,6 @@ enQuestionLevel ChoiceQuestionLevel()
 enOperationType GenerateRandomOperation(stQuestion &Question)
 {
 	return Question.Operation = (enOperationType)RandomNumber(1, 4);
-
 
 }
 
@@ -142,11 +140,6 @@ int Calculate(stQuestion Question , enOperationType OperationType)
 	case Div:
 		return Question.Number1 / Question.Number2;
 		break;
-	/*case Mix1:
-		return GenerateRandomOperation(Question);*/
-		
-
-	
 	}
 
 
@@ -178,10 +171,9 @@ enOperationType GenerateOperation( )
 {
 	
 	int OperationType = 0;
-	cout << "choice a operator  1 + 2: -  3:*  4:/ 5:Mix";
+	cout << "\nchoice a Number for an operation 1:[+],  2:[-],  3 :[*],  4:[/],  5:[Mix]: ";
 	cin >>OperationType;
 	return (enOperationType)OperationType;
-
 
 }
 
@@ -197,36 +189,61 @@ void ConceptionQuestion(stQuestion Question)
 void RoundInfo(stQuestion QuestionInfo , short HowManyQuestion , stQuizze &quiez)
 
 {
-	
-	
-	
-	cout << QuestionInfo.isRightAnswer<<endl;
+	// if the user gets a correct answer , the screen will turn green else red 
+		
+
 	if (QuestionInfo.isRightAnswer == true)
 	{
-		cout << " Your Answer is correct:)";
-		 system("color 2f");
-		 quiez.NumberOfRightAnswer++;
+		cout << " \nYour Answer is correct:)\n\n";
+		 system("color 2f"); 
+		 quiez.NumberOfRightAnswer++;  
 		 
 	}
 	else
 	{
 		cout << "\n Your  Answer is Wrong:(!\n";
-		cout << "this the right answer: "<< QuestionInfo.RightAnswer << endl;
+		cout << "this the right answer: "<< QuestionInfo.RightAnswer << endl<<endl;
 	system("color 4F");
 	quiez.NumberOfWrongAnswer++;
 
 	}
 
+}
+
+
+void headingGameOver() {
+	cout << setw(92) << "|------------------------------------------------------------|\n";
+	cout << setw(92) << "|                          Game Over                         |\n";
+	cout << setw(92) << "|------------------------------------------------------------|\n";
 
 }
 
+string isPass(stQuizze quiz)
+{
+	if (quiz.NumberOfRightAnswer >= quiz.NumberOfWrongAnswer)
+		return "You Pass";
+
+	return "You Fail";
+}
+
+void InterfaceGameOver( stQuizze quiz )
+{
+
+	cout <<setw(30) << "|" << setw(30) << "you answered wrong|" << setw(30) << quiz.NumberOfWrongAnswer << "|\n";
+	cout <<setw(30) << "|" << setw(30) << "you answered right |" << setw(30) << quiz.NumberOfRightAnswer << "|\n";
+	cout <<setw(30) << "|" << setw(30) << "final result|" << setw(30) << isPass(quiz) << "|\n";
+	cout <<setw(92) << "|------------------------------------------------------------|\n";
+	cout <<setw(92) << "|                        thank you :)                        |\n";
+	cout <<setw(92) << "|------------------------------------------------------------|\n";
+
+}
 
 
 
 void PlayGame(int HowManyQuestion, enQuestionLevel  QuestionLevel, enOperationType  OperationType)
 {
 
-	short RightAnswers = 0, WrongAnswers = 0;
+	
 
 	stQuestion Question;
 	stQuizze quiz;
@@ -243,10 +260,8 @@ void PlayGame(int HowManyQuestion, enQuestionLevel  QuestionLevel, enOperationTy
 		else
 			Question.Operation = OperationType;
 			
-	
 
-		cout << Question.Operation<<endl;
-		cout << "\n\nQuestion [" << NumberOfQuestions << "/" << HowManyQuestion << "]:\n";
+		cout << "\nQuestion [" << NumberOfQuestions << "/" << HowManyQuestion << "]: ";
 		ConceptionQuestion(Question);
 
 		Question.RightAnswer = Calculate(Question, Question.Operation);
@@ -259,23 +274,16 @@ void PlayGame(int HowManyQuestion, enQuestionLevel  QuestionLevel, enOperationTy
 
 	}
 
-	cout << "thi number of the right answer: " << quiz.NumberOfRightAnswer << endl;
-	cout <<"thi number of the wrong answer: " << quiz.NumberOfWrongAnswer<<endl;
-	
+	headingGameOver();
 
-
-	
-
-	
+	InterfaceGameOver(quiz);
 
 }
-
 
 
 void StartGame()
 {
 	char PlayAgain = 'Y';
-	
 
 	do
 	{
@@ -285,16 +293,10 @@ void StartGame()
 	enQuestionLevel QuestionLevel = ChoiceQuestionLevel();
 		 PlayGame(NumberOfQuestion,QuestionLevel , GenerateOperation());
 
-
-
-		cout << "Do you want to play again? Y/N: ";
+		cout << "\nDo you want to play again? Y/N: ";
 		cin >> PlayAgain;
 
-		
-
 	} while (PlayAgain == 'Y' || PlayAgain == 'y');
-
-	
 
 }
 int main() {
@@ -303,7 +305,5 @@ int main() {
 
 	StartGame();
 
-
-
-
+	return 0;
 }
